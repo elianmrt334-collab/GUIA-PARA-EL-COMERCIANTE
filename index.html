@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flipbook - Guía para el Comerciante UVG</title>
+
+    <!-- Tailwind CSS para la interfaz exterior -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Librería StPageFlip para el efecto de pasar páginas 3D -->
+    <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+
+    <style>
+        body {
+            background-color: #2d3748; /* Fondo oscuro tipo escritorio */
+            background-image: radial-gradient(#4a5568 1px, transparent 1px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* Contenedor principal del libro */
+        .book-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 85vh;
+            padding: 20px;
+        }
+
+        /* Estilos de las páginas del libro */
+        .page {
+            background-color: #ffffff;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.1); /* Sombra interna para dar volumen */
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .page-content {
+            padding: 40px 35px;
+            height: 100%;
+            box-sizing: border-box;
+            /* REQUISITOS DEL USUARIO: Arial 12, Interlineado 1.5, Justificado */
+            font-family: Arial, sans-serif;
+            font-size: 12pt;
+            line-height: 1.5;
+            text-align: justify;
+            color: #1a202c;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Sombra central del libro (el pliegue) */
+        .page.--left {
+            border-right: 1px solid #e2e8f0;
+            box-shadow: inset -10px 0 20px rgba(0,0,0,0.05);
+        }
+        .page.--right {
+            border-left: 1px solid #e2e8f0;
+            box-shadow: inset 10px 0 20px rgba(0,0,0,0.05);
+        }
+
+        /* Títulos */
+        h1 {
+            font-size: 16pt;
+            color: #004d2e;
+            border-bottom: 2px solid #27ae60;
+            padding-bottom: 5px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+        h2 {
+            font-size: 13pt;
+            color: #27ae60;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #27ae60;
+            padding-left: 8px;
+            text-align: left;
+        }
+        p { margin-bottom: 15px; margin-top: 0; }
+        ul, ol { margin-top: 0; margin-bottom: 15px; padding-left: 20px; }
+        li { margin-bottom: 5px; }
+
+        /* Numeración de páginas */
+        .page-number {
+            position: absolute;
+            bottom: 15px;
+            font-size: 9pt;
+            color: #718096;
+            font-family: Arial, sans-serif;
+        }
+        .page.--left .page-number { left: 20px; }
+        .page.--right .page-number { right: 20px; }
+
+        /* LOGO UVG EN CSS */
+        .logo-uvg-code {
+            text-align: center;
+            margin: 20px auto 30px auto;
+            width: 100%;
+        }
+        .uvg-letters {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 55pt;
+            font-weight: 900;
+            color: #004d2e;
+            line-height: 0.8;
+            letter-spacing: -3px;
+            margin: 0;
+            padding: 0;
+        }
+        .uvg-line {
+            height: 3px;
+            background-color: #27ae60;
+            margin: 10px 15%;
+            border: none;
+        }
+        .uvg-text {
+            font-family: 'Arial', sans-serif;
+            font-size: 11pt;
+            font-weight: bold;
+            color: #004d2e;
+            line-height: 1.2;
+            letter-spacing: 0.5px;
+        }
+
+        /* Estilos Portada */
+        .cover { background-color: #f4fbf7; }
+        .portada-curso {
+            font-size: 12pt;
+            color: #27ae60;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .portada-titulo {
+            font-size: 26pt;
+            color: #004d2e;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 10px;
+            border: none;
+        }
+        .portada-subtitulo {
+            font-size: 14pt;
+            color: #444;
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .caja-integrantes {
+            background-color: white;
+            border: 2px solid #27ae60;
+            padding: 15px;
+            text-align: left;
+            border-radius: 6px;
+        }
+        .integrante {
+            margin-bottom: 10px;
+            border-bottom: 1px dashed #c8e6d4;
+            padding-bottom: 5px;
+            font-size: 11pt;
+            display: flex;
+            justify-content: space-between;
+        }
+        .integrante:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .carnet { color: #27ae60; font-weight: bold; }
+        .portada-fecha { font-weight: bold; color: #555; text-align: center; margin-top: 20px; }
+
+        /* Estilos índice */
+        .indice-item { margin-bottom: 8px; border-bottom: 1px dotted #cbd5e0; padding-bottom: 4px;}
+        .indice-item strong { color: #004d2e; }
+
+    </style>
+</head>
+<body>
+
+    <!-- Encabezado y Controles -->
+    <div class="bg-green-900 text-white p-4 shadow-lg sticky top-0 z-50 flex justify-between items-center">
+        <div>
+            <h1 class="text-xl font-bold border-none m-0 p-0 text-white normal-case">Guía UVG - Revista Interactiva</h1>
+            <p class="text-sm text-green-200">Arrastra las esquinas para pasar de página</p>
+        </div>
+        <div class="flex gap-2">
+            <button id="btn-prev" class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded font-bold transition flex items-center gap-2">
+                &larr; Anterior
+            </button>
+            <button id="btn-next" class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded font-bold transition flex items-center gap-2">
+                Siguiente &rarr;
+            </button>
+        </div>
+    </div>
+
+    <div class="book-container">
+        <!-- Contenedor del Flipbook -->
+        <div id="flipbook">
+            
+            <!-- PÁGINA 1: PORTADA -->
+            <div class="page cover">
+                <div class="page-content justify-center">
+                    <div class="logo-uvg-code">
+                        <div class="uvg-letters">UVG</div>
+                        <hr class="uvg-line">
+                        <div class="uvg-text">UNIVERSIDAD<br>DEL VALLE<br>DE GUATEMALA</div>
+                    </div>
+                    
+                    <div class="portada-curso">Entorno Legal para la Formación de Negocios</div>
+                    <h1 class="portada-titulo">Guía para el Comerciante</h1>
+                    <div class="portada-subtitulo">Derechos y Obligaciones</div>
+                    
+                    <div class="caja-integrantes">
+                        <div class="text-center font-bold text-green-900 mb-3 uppercase">Integrantes del Grupo</div>
+                        <div class="integrante"><span>Kristel Nalleli Pascual España</span> <span class="carnet">251508</span></div>
+                        <div class="integrante"><span>Elián Antonio Martínez Jácome</span> <span class="carnet">251808</span></div>
+                        <div class="integrante"><span>Christian José Cortéz Bolla</span> <span class="carnet">251834</span></div>
+                    </div>
+                    <div class="portada-fecha">1 de junio de 2026</div>
+                </div>
+            </div>
+
+            <!-- PÁGINA 2: INTERIOR DE PORTADA (En blanco) -->
+            <div class="page cover">
+                <div class="page-content" style="background-color: #e6f2eb; display: flex; align-items: center; justify-content: center;">
+                    <div style="opacity: 0.1;" class="logo-uvg-code">
+                        <div class="uvg-letters">UVG</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PÁGINA 3: ÍNDICE -->
+            <div class="page">
+                <div class="page-content">
+                    <h1>I. Índice</h1>
+                    <div class="indice-item"><strong>I.</strong> Índice</div>
+                    <div class="indice-item"><strong>II.</strong> ¿Qué es un comerciante?</div>
+                    <div class="indice-item"><strong>III.</strong> Requisitos y pasos para la patente de comercio</div>
+                    <div class="indice-item"><strong>IV.</strong> Protección al consumidor y usuarios</div>
+                    <div class="indice-item"><strong>V.</strong> Trámite del libro de quejas</div>
+                    <div class="indice-item"><strong>VI.</strong> Derechos y obligaciones de los contribuyentes</div>
+                    <div class="indice-item"><strong>VII.</strong> Régimen Tributario y Libros</div>
+                    <div class="indice-item"><strong>VIII.</strong> Conclusiones y Recomendaciones</div>
+                    <div class="indice-item"><strong>IX.</strong> Referencias Legales</div>
+                    <span class="page-number">1</span>
+                </div>
+            </div>
+
+            <!-- PÁGINA 4: ¿QUÉ ES UN COMERCIANTE? -->
+            <div class="page">
+                <div class="page-content">
+                    <h1>II. ¿Qué es un Comerciante?</h1>
+                    <p>
+                        El comerciante es aquella persona, ya sea individual o jurídica, que ejerce en nombre propio y con fines de lucro diversas actividades que la ley califica como actos de comercio.
+                    </p>
+                    <p>
+                        Según el Código de Comercio de Guatemala, son comerciantes quienes se dedican a la industria dirigida a la producción o transformación de bienes, la intermediación en la circulación de bienes y la prestación de servicios, o la banca, seguros y fianzas.
+                    </p>
+                    <p>
+                        El comercio involucra tres actores principales: el comerciante (que ofrece el bien), la Superintendencia de Administración Tributaria SAT (que fiscaliza los tributos) y el consumidor (el destinatario final).
+                    </p>
+                    <span class="page-number">2</span>
+                </div>
+            </div>
+
+            <!-- PÁGINA 5: PATENTE DE COMERCIO -->
+            <div class="page">
+                <div class="page-content">
+                    <h1>III. Patente de Comercio</h1>
+                    <h2>Requisitos para Obtenerla</h2>
+                    <p>Para operar legalmente, el comerciante debe registrar su empresa mercantil. Los requisitos fundamentales son:</p>
+                    <ul>
+                        <li>Formulario de inscripción del Registro Mercantil.</li>
+                        <li>Documento Personal de Identificación (DPI).</li>
+                        <li>Número de Identificación Tributaria (NIT) activo.</li>
+                        <li>Comprobante de pago de aranceles.</li>
+                    </ul>
+                    <h2>Pasos del Trámite</h2>
+                    <ol>
+                        <li>Inscripción previa en SAT y obtención de NIT.</li>
+                        <li>Pago de aranceles en bancos autorizados (Banrural).</li>
+                        <li>Presentación del expediente en Registro Mercantil.</li>
+                        <li>Descarga de la patente electrónica (adherir Timbres Fiscales).</li>
+                    </ol>
+                    <span class="page-number">3</span>
+                </div>
+            </div>
+
+            <!-- PÁGINA 6: PROTECCIÓN AL CONSUMIDOR -->
+            <div class="page">
+                <div class="page-content">
+                    <h1>IV. Protección al Consumidor</h1>
+                    <p>
+                        El consumidor o usuario es la persona que adquiere bienes y servicios como destinatario final. En Guatemala, la DIACO protege sus derechos para mantener un mercado justo.
+                    </p>
+                    <h2>Derechos del Usuario</h2>
+                    <ul>
+                        <li>Recibir productos y servicios de calidad garantizada.</li>
+                        <li>Protección a su vida, salud y seguridad.</li>
+                        <li>Información clara, veraz y oportuna sobre los precios.</li>
+                        <li>Exigir factura por todas las compras realizadas.</li>
+                        <li>Protección contra publicidad engañosa.</li>
+                    </ul>
+                    <h2>Obligaciones</h2>
+                    <p>Leer contratos, utilizar adecuadamente los productos y presentar reclamos de manera respetuosa.</p>
+                    <span class="page-number">4</span>
+                </div>
+            </div>
+
+            <!-- PÁGINA 7: LIBRO DE QUEJAS Y SECCIÓN TRIBUTARIA -->
+            <div class="page">
+                <div class="page-content">
+                    <h1>V. Trámite Libro de Quejas</h1>
+                    <p>
+                        Es un documento oficial, autorizado por la DIACO, obligatorio y a la vista del público para registrar inconformidades.
+                    </p>
+                    <p><strong>Procedimiento:</strong> Presentar copia de la Patente de Comercio, fotocopia de DPI, llenar la solicitud y realizar el pago en la DIACO. El comerciante jamás debe alterar folios; negarse a darlo genera severas multas.</p>
+                    
+                    <h1 style="margin-top: 20px;">VI. Sección Tributaria</h1>
+                    <h2>El Contribuyente</h2>
+                    <p>Es la persona individual o jurídica obligada por mandato legal al pago de impuestos. Todo comerciante debe inscribirse ante la SAT antes de iniciar operaciones lucrativas.</p>
+                    <span class="page-number">5</span>
+                </div>
+            </div>
+
+            <!-- PÁGINA 8: DERECHOS Y OBLIGACIONES TRIBUTARIAS -->
+            <div class="page">
+                <div class="page-content">
+                    <h2>Derechos del Contribuyente</h2>
+                    <ul>
+                        <li>Ser atendido con respeto y gratuidad.</li>
+                        <li>Garantía de confidencialidad de su información.</li>
+                        <li>Derecho a rectificar declaraciones tributarias.</li>
+                        <li>Derecho de defensa ante resoluciones desfavorables.</li>
+                    </ul>
+                    <h2>Obligaciones Formales</h2>
+                    <ul>
+                        <li>Inscripción y actualización de datos (30 días hábiles).</li>
+                        <li>Autorizar y emitir Factura Electrónica en Línea (FEL).</li>
+                        <li>Presentar declaraciones juradas mensualmente, incluso cuando el valor sea cero.</li>
+                        <li>Conservar libros contables por un mínimo de cuatro (4) años.</li>
+                    </ul>
+                    <span class="page-number">6</span>
+                </div>
+            </div>
+
+            <!-- PÁGINA 9: RÉGIMEN Y LIBROS CONTABLES -->
+            <div class="page">
+                <div class="page-content">
+                    <h1>VII. Régimen y Libros</h1>
+                    <h2>Régimen de Pequeño Contribuyente</h2>
+                    <p>
+                        Aplica si los ingresos por ventas o servicios no superan los <strong>Q150,000.00</strong> durante un año calendario. La tarifa es del <strong>5%</strong> sobre el monto total facturado. Si se vende a Agentes de Retención, estos retienen el 5% definitivamente.
+                    </p>
+                    <h2>Libros Contables y Mercantiles</h2>
+                    <p>Son los registros obligatorios de las operaciones financieras. Incluyen:</p>
+                    <ul>
+                        <li><strong>Libro de Inventarios:</strong> Detalla activo y pasivo.</li>
+                        <li><strong>Libro Diario y Mayor.</strong></li>
+                        <li><strong>Libro de Compras y Ventas:</strong> Puede llevarse mediante el Libro Electrónico Tributario (LET) de la SAT.</li>
+                    </ul>
+                    <span class="page-number">7</span>
+                </div>
+            </div>
+
+            <!-- PÁGINA 10: CONCLUSIONES Y REFERENCIAS -->
+            <div class="page">
+                <div class="page-content">
+                    <h1>VIII. Conclusiones</h1>
+                    <p>
+                        1. La formalización (SAT y Registro Mercantil) brinda seguridad jurídica y fomenta el crecimiento ordenado.<br>
+                        2. El cumplimiento tributario (FEL, SAT-2046) evita embargos y multas.<br>
+                        3. Respetar al consumidor mejora la competitividad comercial.
+                    </p>
+                    
+                    <h1 style="margin-top:20px;">IX. Referencias Legales</h1>
+                    <ul>
+                        <li>Constitución Política de la República de Guatemala.</li>
+                        <li>Código de Comercio de Guatemala (Dto. 2-70).</li>
+                        <li>Código Tributario (Dto. 6-91).</li>
+                        <li>Ley de Protección al Consumidor y Usuario.</li>
+                    </ul>
+                    <span class="page-number">8</span>
+                </div>
+            </div>
+
+            <!-- PÁGINA 11: INTERIOR CONTRAPORTADA -->
+            <div class="page cover">
+                <div class="page-content" style="background-color: #e6f2eb;">
+                </div>
+            </div>
+
+            <!-- PÁGINA 12: CONTRAPORTADA -->
+            <div class="page cover">
+                <div class="page-content justify-center items-center" style="background-color: #004d2e;">
+                    <div class="logo-uvg-code" style="transform: scale(0.7);">
+                        <div class="uvg-letters" style="color: white;">UVG</div>
+                        <hr class="uvg-line" style="background-color: white;">
+                    </div>
+                    <p class="text-white text-center italic mt-4">Gracias por consultar esta guía.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar el Flipbook
+            const flipBookContainer = document.getElementById('flipbook');
+            
+            const pageFlip = new St.PageFlip(flipBookContainer, {
+                width: 425, // Ancho base de una página (proporción carta)
+                height: 550, // Alto base
+                size: "stretch", // Se estira para ajustarse a la pantalla
+                minWidth: 315,
+                maxWidth: 500,
+                minHeight: 420,
+                maxHeight: 650,
+                maxShadowOpacity: 0.3, // Sombra al pasar la página
+                showCover: true, // La primera y última página se comportan como tapas duras
+                mobileScrollSupport: true,
+                usePortrait: true // En móviles se muestra de a 1 página
+            });
+
+            // Cargar las páginas desde el HTML
+            pageFlip.loadFromHTML(document.querySelectorAll('.page'));
+
+            // Botones de control superior
+            document.getElementById('btn-prev').addEventListener('click', () => {
+                pageFlip.flipPrev();
+            });
+
+            document.getElementById('btn-next').addEventListener('click', () => {
+                pageFlip.flipNext();
+            });
+        });
+    </script>
+</body>
+</html>
