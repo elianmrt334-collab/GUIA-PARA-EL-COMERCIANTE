@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Revista Interactiva - Guía para el Comerciante UVG</title>
+    <title>Revista Interactiva Completa - Guía Comerciante UVG</title>
     
     <!-- Tailwind CSS para la interfaz exterior -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -11,6 +11,8 @@
     <!-- Pre-carga y script de StPageFlip para máxima velocidad -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js" as="script">
     <script defer src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
         /* ================= ESTILOS BASE ================= */
@@ -22,7 +24,7 @@
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow-x: hidden;
-            overscroll-behavior-y: none; /* Evita tirones al hacer scroll en móviles */
+            overscroll-behavior-y: none;
         }
 
         .flipbook-wrapper {
@@ -42,7 +44,6 @@
             flex-direction: column;
             box-sizing: border-box;
             padding: 35px 40px;
-            /* Aceleración por hardware para fluidez extrema */
             -webkit-transform: translateZ(0);
             transform: translateZ(0);
             -webkit-backface-visibility: hidden;
@@ -53,6 +54,7 @@
         .page.--left { border-right: 1px solid #e2e8f0; }
         .page.--right { border-left: 1px solid #e2e8f0; }
 
+        /* ================= FORMATO ESTRICTO SOLICITADO ================= */
         /* Contenido: Arial 12, Interlineado 1.5, Justificado */
         .page-content {
             font-family: Arial, sans-serif;
@@ -68,7 +70,7 @@
         /* Títulos y Subtítulos */
         h1 {
             font-family: Arial, sans-serif;
-            font-size: 16pt;
+            font-size: 15pt;
             color: #004d2e;
             border-bottom: 2px solid #27ae60;
             padding-bottom: 5px;
@@ -97,15 +99,15 @@
         /* ================= IMÁGENES ULTRA OPTIMIZADAS ================= */
         .page-img {
             width: 100%;
-            height: 160px;
+            height: 140px;
             object-fit: cover; 
             border-radius: 4px;
             margin: 5px 0 10px 0;
             border: 1px solid #e2e8f0;
-            /* Evita parpadeos al cargar */
             background-color: #f1f5f9;
             color: transparent;
         }
+        .img-small { height: 100px; }
 
         /* ================= LOGO UVG CREADO CON CÓDIGO HTML/CSS ================= */
         .logo-uvg-code {
@@ -153,18 +155,20 @@
         .page-back .uvg-line { background-color: white; }
 
         .page-number { text-align: center; font-size: 9pt; color: #a0aec0; margin-top: auto; padding-top: 5px; font-family: Arial, sans-serif; }
-        .indice-item { margin-bottom: 6px; border-bottom: 1px dotted #cbd5e0; padding-bottom: 2px; display: flex; justify-content: space-between; font-size: 11.5pt;}
-
+        .indice-item { margin-bottom: 4px; border-bottom: 1px dotted #cbd5e0; padding-bottom: 2px; display: flex; justify-content: space-between; font-size: 11pt;}
     </style>
 </head>
 <body>
 
-    <!-- BARRA SUPERIOR -->
     <div class="bg-green-900 text-white p-3 shadow-md sticky top-0 z-50 flex justify-between items-center w-full">
         <div>
-            <h1 class="text-lg font-bold border-none m-0 p-0 text-white normal-case text-left">Guía UVG - Revista</h1>
+            <h1 class="text-lg font-bold border-none m-0 p-0 text-white normal-case text-left">Guía Completa UVG - Revista</h1>
         </div>
         <div class="flex gap-2">
+            <button id="btn-pdf" onclick="descargarPDF()" class="bg-red-600 hover:bg-red-500 px-3 py-1.5 text-sm rounded font-bold transition flex items-center gap-1">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <span>Descargar PDF</span>
+            </button>
             <button id="btn-prev" class="bg-green-600 hover:bg-green-500 px-3 py-1.5 text-sm rounded font-bold transition">
                 &larr; Anterior
             </button>
@@ -214,17 +218,15 @@
             <div class="page">
                 <div class="page-content">
                     <h1>I. Índice</h1>
-                    <!-- Imagen decorativa del índice -->
-                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=500&q=60" alt="Índice" class="page-img" style="height: 100px;">
                     <div class="indice-item"><span><strong>I.</strong> Índice</span> <span>Pág. 1</span></div>
                     <div class="indice-item"><span><strong>II.</strong> Introducción</span> <span>Pág. 2</span></div>
-                    <div class="indice-item"><span><strong>III.</strong> ¿Qué es un comerciante?</span> <span>Pág. 3</span></div>
-                    <div class="indice-item"><span><strong>IV.</strong> Requisitos y pasos (Patente)</span> <span>Pág. 4</span></div>
-                    <div class="indice-item"><span><strong>V.</strong> Protección al consumidor</span> <span>Pág. 7</span></div>
-                    <div class="indice-item"><span><strong>VI.</strong> Trámite del libro de quejas</span> <span>Pág. 9</span></div>
-                    <div class="indice-item"><span><strong>VII.</strong> Sección Tributaria</span> <span>Pág. 10</span></div>
-                    <div class="indice-item"><span><strong>VIII.</strong> Régimen Tributario y Libros</span> <span>Pág. 11</span></div>
-                    <div class="indice-item"><span><strong>IX.</strong> Conclusiones y Referencias</span> <span>Pág. 12</span></div>
+                    <div class="indice-item"><span><strong>III.</strong> Sección Tributaria</span> <span>Pág. 3</span></div>
+                    <div class="indice-item"><span><strong>IV.</strong> Sección Mercantil</span> <span>Pág. 6</span></div>
+                    <div class="indice-item"><span><strong>V.</strong> Sección del Consumidor</span> <span>Pág. 9</span></div>
+                    <div class="indice-item"><span><strong>VI.</strong> Libro de Quejas</span> <span>Pág. 12</span></div>
+                    <div class="indice-item"><span><strong>VII.</strong> Conclusiones y Recomendaciones</span> <span>Pág. 13</span></div>
+                    <div class="indice-item"><span><strong>VIII.</strong> Referencias Legales</span> <span>Pág. 14</span></div>
+                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=500&q=60" loading="lazy" alt="Índice" class="page-img" style="margin-top: 20px;">
                 </div>
                 <div class="page-number">1</div>
             </div>
@@ -233,189 +235,244 @@
             <div class="page">
                 <div class="page-content">
                     <h1>II. Introducción</h1>
-                    <img src="https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?auto=format&fit=crop&w=500&q=60" alt="Comercio" class="page-img">
-                    <p>El comerciante es aquella persona, ya sea individual o jurídica, que ejerce en nombre propio y con fines de lucro diversas actividades que la ley califica como actos de comercio.</p>
-                    <p>En Guatemala, el comercio dinamiza el mercado y genera empleos. La relación comercial involucra tres actores: el comerciante, la SAT y el consumidor.</p>
-                    <p>El <strong>objetivo de esta guía</strong> es orientar sobre los deberes formales, tributarios, mercantiles y de protección al consumidor.</p>
+                    <p><strong>¿Qué es un comerciante?</strong><br>Es la persona individual o jurídica que, con capacidad legal, ejerce en nombre propio y con fines de lucro actividades que la ley califica como actos de comercio.</p>
+                    <p><strong>Importancia del comercio en Guatemala:</strong><br>El comercio es un pilar esencial para el desarrollo económico del país, ya que estimula la inversión, fomenta la competencia, dinamiza el mercado interno y es una de las principales fuentes de generación de empleo.</p>
+                    <p><strong>Relación Comerciante, SAT y Consumidor:</strong><br>Es una relación de equilibrio; el comerciante ofrece bienes, el consumidor los adquiere generando el hecho generador de impuestos, y la SAT recauda y fiscaliza para beneficio del Estado.</p>
+                    <p><strong>Objetivo de la guía:</strong><br>Proveer una herramienta clara que informe al emprendedor sobre sus deberes tributarios, trámites mercantiles y su responsabilidad con los usuarios.</p>
                 </div>
                 <div class="page-number">2</div>
             </div>
 
-            <!-- PÁGINA 5: ¿QUÉ ES UN COMERCIANTE? -->
+            <!-- PÁGINA 5: TRIBUTARIA - DEFINICIÓN -->
             <div class="page">
                 <div class="page-content">
-                    <h1>III. ¿Qué es un Comerciante?</h1>
-                    <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32f7?auto=format&fit=crop&w=500&q=60" loading="lazy" decoding="async" alt="Negocios" class="page-img">
-                    <h2>Concepto Legal</h2>
-                    <p>Según el Código de Comercio de Guatemala, son comerciantes quienes ejercen en nombre propio la producción o transformación de bienes, la intermediación en su circulación, o la prestación de servicios.</p>
-                    <h2>¿Quiénes pueden ejercer?</h2>
-                    <p>Tienen capacidad las personas individuales y jurídicas hábiles para contratar. La inscripción mercantil garantiza la seguridad jurídica del negocio.</p>
+                    <h1>III. Sección Tributaria</h1>
+                    <h2>A. Definición de Contribuyente</h2>
+                    <p>Un contribuyente es la persona que, por realizar una actividad económica, está obligada por ley al pago de impuestos y deberes formales.</p>
+                    <p><strong>¿Quiénes están obligados?</strong><br>Toda persona o empresa que inicie operaciones lucrativas debe inscribirse ante la SAT.</p>
+                    <p><strong>Persona Individual vs. Persona Jurídica:</strong><br>
+                    La <em>persona individual</em> actúa a título personal y su responsabilidad recae sobre su propio patrimonio. La <em>persona jurídica</em> (ej. Sociedad Anónima) es una entidad creada por socios que adquiere personalidad legal propia e independiente a la de sus dueños.</p>
+                    <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=500&q=60" loading="lazy" alt="SAT" class="page-img img-small">
                 </div>
                 <div class="page-number">3</div>
             </div>
 
-            <!-- PÁGINA 6: PATENTE DE COMERCIO -->
+            <!-- PÁGINA 6: TRIBUTARIA - DERECHOS -->
             <div class="page">
                 <div class="page-content">
-                    <h1>IV. Patente de Comercio</h1>
-                    <h2>Requisitos de Inscripción</h2>
-                    <p>Para operar legalmente, se debe obtener la Patente de Comercio. Los requisitos son:</p>
-                    <ul>
-                        <li>Formulario de inscripción del Registro Mercantil.</li>
-                        <li>DPI y Número de Identificación Tributaria (NIT).</li>
-                        <li>Pago de aranceles correspondientes.</li>
-                        <li>Dirección comercial y Nombre comercial.</li>
-                    </ul>
-                    <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=500&q=60" loading="lazy" decoding="async" alt="Documentos legales" class="page-img">
+                    <h2>B. Derechos de los Contribuyentes</h2>
+                    <p>Todo contribuyente goza de los siguientes derechos:</p>
+                    <ol>
+                        <li>Ser atendido con respeto por la SAT.</li>
+                        <li>Recibir orientación tributaria gratuita.</li>
+                        <li>Tener confidencialidad de su información.</li>
+                        <li>Presentar recursos o inconformidades.</li>
+                        <li>Obtener NIT y actualización de datos.</li>
+                        <li>Solicitar solvencias y certificaciones.</li>
+                        <li>Recibir información clara sobre impuestos.</li>
+                        <li>Derecho a corregir declaraciones tributarias.</li>
+                        <li>Derecho a defensa en procedimientos administrativos.</li>
+                        <li>Derecho a recibir constancia de pagos realizados.</li>
+                    </ol>
                 </div>
                 <div class="page-number">4</div>
             </div>
 
-            <!-- PÁGINA 7: PASOS Y PAGOS MERCANTILES -->
+            <!-- PÁGINA 7: TRIBUTARIA - OBLIGACIONES -->
             <div class="page">
                 <div class="page-content">
-                    <h2>Pasos para el trámite</h2>
+                    <h2>C. Obligaciones de los Contribuyentes</h2>
+                    <p>Es indispensable cumplir con las siguientes obligaciones:</p>
                     <ol>
-                        <li>Inscribirse en la SAT y obtener NIT.</li>
-                        <li>Presentar formulario en el Registro Mercantil.</li>
-                        <li>Realizar pagos correspondientes.</li>
-                        <li>Obtener patente electrónica y timbres.</li>
+                        <li>Inscribirse ante la SAT.</li>
+                        <li>Actualizar datos tributarios.</li>
+                        <li>Emitir facturas autorizadas (FEL).</li>
+                        <li>Pagar impuestos correspondientes.</li>
+                        <li>Presentar declaraciones tributarias.</li>
+                        <li>Llevar libros contables cuando corresponda.</li>
+                        <li>Conservar documentos tributarios (4 años).</li>
+                        <li>Permitir auditorías o verificaciones.</li>
+                        <li>Cumplir con fechas de pago.</li>
+                        <li>Informar cierre o suspensión de actividades.</li>
                     </ol>
-                    <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=500&q=60" loading="lazy" decoding="async" alt="Pagos y finanzas" class="page-img" style="height: 120px;">
-                    <h2>Pagos a Realizar</h2>
-                    <p>El comerciante deberá cancelar: Pago de inscripción, edictos (si aplica), Impuesto de patente (Timbres), honorarios y costos administrativos en bancos autorizados.</p>
                 </div>
                 <div class="page-number">5</div>
             </div>
 
-            <!-- PÁGINA 8: LIBROS CONTABLES -->
+            <!-- PÁGINA 8: RÉGIMEN Y MERCANTIL 1 -->
             <div class="page">
                 <div class="page-content">
-                    <h2>Libros Contables y Mercantiles</h2>
-                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=500&q=60" loading="lazy" decoding="async" alt="Libros contables" class="page-img">
-                    <p>Los libros contables son los registros obligatorios donde se anota cronológicamente la información financiera. Habilitarlos en la SAT y el Registro Mercantil es vital para la legalidad.</p>
-                    <p>Los tipos de libros obligatorios incluyen:</p>
-                    <ul>
-                        <li><strong>Libro de Inventarios:</strong> Activos y pasivos.</li>
-                        <li><strong>Libro Diario:</strong> Transacciones diarias.</li>
-                        <li><strong>Libro Mayor:</strong> Saldos por cuenta.</li>
-                        <li><strong>Libro de Compras y Ventas.</strong></li>
-                    </ul>
+                    <h2>D. Régimen Tributario</h2>
+                    <p><strong>Pequeño Contribuyente:</strong> Diseñado para quienes sus ingresos por ventas o servicios no superan los Q150,000.00 anuales. El <strong>porcentaje de impuestos aplicable es del 5%</strong> sobre los ingresos brutos mensuales.</p>
+
+                    <h1>IV. Sección Mercantil</h1>
+                    <h2>A. Definición de Comerciante</h2>
+                    <p><strong>Concepto legal:</strong> Quien ejerce en nombre propio la industria dirigida a producción de bienes o prestación de servicios. <strong>¿Quiénes?:</strong> Personas hábiles para contratar. <strong>Importancia:</strong> La inscripción mercantil otorga seguridad y formalidad al negocio.</p>
                 </div>
                 <div class="page-number">6</div>
             </div>
 
-            <!-- PÁGINA 9: SECCIÓN DEL CONSUMIDOR -->
+            <!-- PÁGINA 9: MERCANTIL - PATENTE Y PASOS -->
             <div class="page">
                 <div class="page-content">
-                    <h1>V. Protección al Consumidor</h1>
-                    <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=500&q=60" loading="lazy" decoding="async" alt="Consumidor" class="page-img" style="height: 130px;">
-                    <h2>A. Definición</h2>
-                    <p>El consumidor es la persona que adquiere bienes como destinatario final. La <strong>DIACO</strong> protege sus derechos.</p>
-                    <h2>B. Derechos del Consumidor</h2>
-                    <ul>
-                        <li>Recibir productos de calidad y seguridad.</li>
-                        <li>Información clara y veraz de los precios.</li>
-                        <li>Recibir factura y exigir garantía.</li>
-                        <li>Protección contra publicidad engañosa.</li>
+                    <h2>B. Patente de Comerciante</h2>
+                    <p><strong>1. Patente de Empresa Individual:</strong></p>
+                    <ul style="margin-bottom: 5px;">
+                        <li>Formulario de inscripción RM.</li>
+                        <li>Documento Personal de Identificación (DPI).</li>
+                        <li>Número de Identificación Tributaria (NIT).</li>
+                        <li>Pago de aranceles correspondientes.</li>
+                        <li>Dirección comercial y Nombre comercial.</li>
+                        <li>Inscripción previa en SAT.</li>
                     </ul>
+                    <p><strong>2. Pasos para el trámite:</strong></p>
+                    <ol>
+                        <li>Inscribirse en la SAT y obtener NIT.</li>
+                        <li>Presentar formulario en el Registro Mercantil.</li>
+                        <li>Realizar pagos correspondientes.</li>
+                        <li>Esperar autorización e inscripción.</li>
+                        <li>Obtener patente de comercio.</li>
+                    </ol>
                 </div>
                 <div class="page-number">7</div>
             </div>
 
-            <!-- PÁGINA 10: OBLIGACIONES Y QUEJAS -->
+            <!-- PÁGINA 10: MERCANTIL - PAGOS -->
             <div class="page">
                 <div class="page-content">
-                    <h2>C. Obligaciones del Consumidor</h2>
-                    <p>Leer contratos, exigir factura, utilizar adecuadamente los productos, cumplir pagos y presentar reclamos de manera respetuosa e informada.</p>
-                    
-                    <h2>D. Pasos para una Queja</h2>
-                    <img src="https://images.unsplash.com/photo-1507925922837-326f12a5270d?auto=format&fit=crop&w=500&q=60" loading="lazy" decoding="async" alt="Consumidor quejas" class="page-img" style="height: 130px;">
-                    <ol>
-                        <li>Reunir pruebas: Factura, contrato, garantías.</li>
-                        <li>Acudir a la DIACO o ingresar en línea.</li>
-                        <li>Completar formulario oficial.</li>
-                        <li>Esperar audiencia de conciliación.</li>
-                    </ol>
+                    <h2>C. Pagos a Realizar</h2>
+                    <ul>
+                        <li>Pago de inscripción (Arancel).</li>
+                        <li>Pago por edictos o publicaciones (Si aplica).</li>
+                        <li>Impuesto de patente (Q50 en Timbres Fiscales).</li>
+                        <li>Honorarios profesionales si aplica.</li>
+                        <li>Costos administrativos.</li>
+                    </ul>
+                    <p><strong>¿Dónde se realizan?</strong> En bancos autorizados del sistema (ej. Banrural).<br>
+                    <strong>Formas de pago:</strong> Depósito en efectivo o banca virtual.<br>
+                    <strong>Consecuencias de no pagar:</strong> Multas, acumulación de intereses, cierres temporales e invalidez legal del negocio.</p>
                 </div>
                 <div class="page-number">8</div>
             </div>
 
-            <!-- PÁGINA 11: LIBRO DE QUEJAS -->
+            <!-- PÁGINA 11: MERCANTIL - LIBROS -->
             <div class="page">
                 <div class="page-content">
-                    <h1>VI. Trámite Libro de Quejas</h1>
-                    <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=500&q=60" loading="lazy" decoding="async" alt="Leyes y quejas" class="page-img" style="height: 120px;">
-                    <p>Documento obligatorio que deben poseer los establecimientos comerciales para registrar inconformidades de manera formal.</p>
-                    <h2>Requisitos y Procedimiento</h2>
-                    <p>Presentar Patente de comercio, datos del establecimiento, solicitud y pago ante la DIACO.</p>
-                    <h2>Obligaciones y Sanciones</h2>
-                    <p>Tenerlo visible, permitir su uso, no arrancar folios. <strong>Sanciones:</strong> Multas severas (UMAs) o cierres por negarse a darlo.</p>
+                    <h2>D. Libros Contables y Mercantiles</h2>
+                    <p><strong>Qué son:</strong> Registros obligatorios donde se anota cronológicamente la historia financiera.</p>
+                    <p><strong>Importancia:</strong> Mantienen el orden contable y son prueba legal de operaciones. Se autorizan en el <strong>Registro Mercantil</strong> y en la <strong>SAT</strong>.</p>
+                    <p><strong>Tipos de libros obligatorios:</strong></p>
+                    <ul>
+                        <li>Libro de Inventarios.</li>
+                        <li>Libro Diario.</li>
+                        <li>Libro Mayor.</li>
+                        <li>Libro de Compras y Ventas.</li>
+                    </ul>
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=500&q=60" loading="lazy" alt="Libros contables" class="page-img img-small">
                 </div>
                 <div class="page-number">9</div>
             </div>
 
-            <!-- PÁGINA 12: SECCIÓN TRIBUTARIA -->
+            <!-- PÁGINA 12: CONSUMIDOR - DERECHOS -->
             <div class="page">
                 <div class="page-content">
-                    <h1>VII. Sección Tributaria</h1>
-                    <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=500&q=60" loading="lazy" decoding="async" alt="Impuestos y SAT" class="page-img">
-                    <h2>Definición de Contribuyente</h2>
-                    <p>Persona obligada al pago de impuestos por mandato legal. Todo comerciante debe inscribirse ante la SAT, actuando como Persona Individual o Jurídica.</p>
-                    <h2>Derechos de los Contribuyentes</h2>
-                    <p>Ser atendido con respeto, gratuidad en procesos, derecho a rectificar, confidencialidad y derecho de defensa.</p>
+                    <h1>V. Sección del Consumidor</h1>
+                    <h2>A. Definición</h2>
+                    <p>El consumidor es la persona que adquiere bienes como destinatario final. La <strong>DIACO</strong> es la institución encargada de proteger sus derechos.</p>
+                    <h2>B. Derechos del Consumidor</h2>
+                    <ol>
+                        <li>Derecho a recibir productos de calidad.</li>
+                        <li>Derecho a información clara y veraz.</li>
+                        <li>Derecho a la seguridad.</li>
+                        <li>Derecho a elegir libremente.</li>
+                        <li>Derecho a reclamar.</li>
+                        <li>Derecho a recibir factura.</li>
+                        <li>Derecho a protección contra publicidad engañosa.</li>
+                        <li>Derecho a trato justo.</li>
+                        <li>Derecho a garantía.</li>
+                        <li>Derecho a educación para el consumo.</li>
+                    </ol>
                 </div>
                 <div class="page-number">10</div>
             </div>
 
-            <!-- PÁGINA 13: OBLIGACIONES TRIBUTARIAS -->
+            <!-- PÁGINA 13: CONSUMIDOR - OBLIGACIONES Y PASOS -->
             <div class="page">
                 <div class="page-content">
-                    <h2>Obligaciones Formales</h2>
+                    <h2>C. Obligaciones del Consumidor</h2>
                     <ul>
-                        <li>Inscripción y actualización (30 días).</li>
-                        <li>Emitir Factura Electrónica (FEL).</li>
-                        <li>Presentar declaraciones juradas.</li>
-                        <li>Conservar libros contables 4 años.</li>
+                        <li>Leer información y contratos.</li>
+                        <li>Exigir factura.</li>
+                        <li>Utilizar adecuadamente los productos.</li>
+                        <li>Cumplir pagos acordados.</li>
+                        <li>Respetar políticas legales del establecimiento.</li>
+                        <li>Presentar reclamos de manera respetuosa.</li>
+                        <li>Informarse sobre sus derechos.</li>
                     </ul>
-                    
-                    <h1>VIII. Régimen Tributario</h1>
-                    <img src="https://images.unsplash.com/photo-1579621970588-a3f5ce599871?auto=format&fit=crop&w=500&q=60" loading="lazy" decoding="async" alt="Dinero e impuestos" class="page-img" style="height: 100px;">
-                    <p><strong>Pequeño Contribuyente:</strong> Ingresos menores a Q150,000 anuales. Tarifa del <strong>5%</strong> mensual sobre las ventas.</p>
+                    <h2>D. Pasos para Presentar una Queja</h2>
+                    <ol>
+                        <li>Reunir pruebas (Factura, Contrato, Fotos, Garantías).</li>
+                        <li>Presentarse ante DIACO o ingresar en línea.</li>
+                        <li>Completar formulario de queja.</li>
+                        <li>Explicar claramente los hechos y adjuntar pruebas.</li>
+                        <li>Esperar notificación o audiencia.</li>
+                        <li>Dar seguimiento al expediente.</li>
+                    </ol>
                 </div>
                 <div class="page-number">11</div>
             </div>
 
-            <!-- PÁGINA 14: CONCLUSIONES -->
+            <!-- PÁGINA 14: LIBRO DE QUEJAS -->
             <div class="page">
                 <div class="page-content">
-                    <h1>IX. Conclusiones</h1>
-                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=500&q=60" loading="lazy" decoding="async" alt="Conclusiones Exito" class="page-img">
-                    <p><strong>1.</strong> La formalización mediante la SAT y el Registro Mercantil brinda seguridad jurídica y permite el crecimiento económico.</p>
-                    <p><strong>2.</strong> El estricto cumplimiento tributario, como la emisión de FEL, previene severas sanciones y multas.</p>
-                    <p><strong>3.</strong> Respetar al consumidor y su derecho de queja mejora la confianza y competitividad del negocio.</p>
+                    <h1>VI. Trámite del Libro de Quejas</h1>
+                    <p><strong>¿Qué es?</strong> Documento obligatorio en establecimientos para registrar inconformidades.</p>
+                    <h2>Requisitos y Procedimiento</h2>
+                    <p>Patente de comercio, datos del local, solicitud ante DIACO y pago correspondiente. Procedimiento: Solicitarlo en DIACO, presentar documentos, registrar datos, autorizar y mantener disponible.</p>
+                    <h2>Obligaciones y Sanciones</h2>
+                    <p>El comerciante debe tenerlo visible, permitir su uso, no alterar anotaciones y dar seguimiento. <strong>Sanciones:</strong> Multas en UMAs o cierres por no tener libro, negarse a darlo o alterar información.</p>
                 </div>
                 <div class="page-number">12</div>
             </div>
 
-            <!-- PÁGINA 15: REFERENCIAS LEGALES -->
+            <!-- PÁGINA 15: CONCLUSIONES -->
             <div class="page">
                 <div class="page-content">
-                    <h1>X. Referencias Legales</h1>
-                    <img src="https://images.unsplash.com/photo-1505664177922-92806611360c?auto=format&fit=crop&w=500&q=60" loading="lazy" decoding="async" alt="Justicia y referencias" class="page-img" style="height: 150px;">
-                    <p>Leyes consultadas para esta guía:</p>
-                    <ul>
-                        <li>Constitución de la República de Guatemala.</li>
-                        <li>Código de Comercio (Decreto 2-70).</li>
-                        <li>Código Tributario (Decreto 6-91).</li>
-                        <li>Ley de Protección al Consumidor (Dto. 006-2003).</li>
-                        <li>Leyes del Impuesto al Valor Agregado (IVA).</li>
-                    </ul>
+                    <h1>VII. Conclusiones y Recomendaciones</h1>
+                    <h2>Conclusiones</h2>
+                    <p>1. Formalizar un negocio a través del Registro Mercantil y SAT no solo cumple un mandato legal, sino que brinda seguridad y abre puertas a créditos y nuevos mercados.</p>
+                    <p>2. El respeto estricto de las normativas de la DIACO no debe verse como un obstáculo, sino como una garantía de confianza que fortalece la relación entre comerciante y consumidor.</p>
+                    <h2>Recomendaciones</h2>
+                    <p>1. Mantener todos los libros contables actualizados diariamente para evitar severas multas de la SAT.</p>
+                    <p>2. Promover una cultura de servicio al cliente donde el Libro de Quejas se vea como una oportunidad de mejora y no como un castigo.</p>
                 </div>
                 <div class="page-number">13</div>
             </div>
 
-            <!-- PÁGINA 16: CONTRAPORTADA -->
+            <!-- PÁGINA 16: REFERENCIAS -->
+            <div class="page">
+                <div class="page-content">
+                    <h1>VIII. Referencias Legales</h1>
+                    <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=500&q=60" loading="lazy" alt="Leyes y quejas" class="page-img" style="height: 120px;">
+                    <p>Para la elaboración de la presente guía se consultaron las siguientes normativas vigentes:</p>
+                    <ul>
+                        <li>Constitución Política de la República de Guatemala.</li>
+                        <li>Código de Comercio de Guatemala (Decreto Número 2-70).</li>
+                        <li>Código Tributario (Decreto Número 6-91).</li>
+                        <li>Ley de Protección al Consumidor y Usuario (Decreto 006-2003 de la DIACO).</li>
+                        <li>Leyes y Reglamentos del Impuesto al Valor Agregado (IVA).</li>
+                    </ul>
+                </div>
+                <div class="page-number">14</div>
+            </div>
+
+            <!-- PÁGINA 17: INTERIOR CONTRAPORTADA -->
+            <div class="page page-cover" data-density="hard">
+                <div class="page-content" style="background-color: #e6f2eb;">
+                </div>
+            </div>
+
+            <!-- PÁGINA 18: CONTRAPORTADA -->
             <div class="page page-back" data-density="hard">
                 <div class="page-content" style="justify-content: center; align-items: center; text-align: center;">
                     <div class="logo-uvg-code" style="transform: scale(0.8);">
@@ -430,24 +487,72 @@
         </div>
     </div>
 
-    <!-- SCRIPT PARA INICIALIZAR EL FLIPBOOK -->
     <script>
+        function descargarPDF() {
+            const btnText = document.querySelector('#btn-pdf span');
+            const originalText = btnText.innerText;
+            btnText.innerText = 'Generando PDF...';
+
+            // 1. Crear un contenedor temporal para alinear todas las páginas verticalmente
+            const tempDiv = document.createElement('div');
+            tempDiv.style.width = '816px'; // Ancho de carta en pixeles (96 DPI)
+            tempDiv.style.backgroundColor = '#ffffff';
+            tempDiv.style.position = 'absolute';
+            tempDiv.style.left = '-9999px'; // Oculto de la vista para no estropear la interfaz
+            tempDiv.style.top = '0';
+
+            // 2. Clonar todas las páginas de la revista interactiva
+            const paginas = document.querySelectorAll('.page');
+            paginas.forEach(page => {
+                const clone = page.cloneNode(true);
+                
+                // Resetear los estilos 3D que el flipbook haya modificado
+                clone.style.display = 'flex';
+                clone.style.position = 'relative';
+                clone.style.transform = 'none';
+                clone.style.width = '816px';
+                clone.style.height = '1056px'; // Alto de carta en pixeles
+                clone.style.border = 'none';
+                clone.style.boxShadow = 'none';
+                clone.style.pageBreakAfter = 'always'; // Forzar salto de página en el PDF
+                
+                tempDiv.appendChild(clone);
+            });
+
+            document.body.appendChild(tempDiv);
+
+            // 3. Configurar html2pdf para máxima calidad
+            const opt = {
+                margin:       0,
+                filename:     'Guia_Comerciante_UVG.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true }, // useCORS permite que las imágenes web se guarden
+                jsPDF:        { unit: 'px', format: 'letter', orientation: 'portrait' }
+            };
+
+            // 4. Generar y descargar PDF
+            html2pdf().set(opt).from(tempDiv).save().then(() => {
+                // Limpiar el documento eliminando el div temporal
+                document.body.removeChild(tempDiv);
+                btnText.innerText = originalText;
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
-            // Aseguramos que los estilos computados del contenedor estén listos
             setTimeout(() => {
                 const flipbookElement = document.getElementById('flipbook');
                 
                 const pageFlip = new St.PageFlip(flipbookElement, {
                     width: 450, // Ancho optimizado
-                    height: 650, // Alto optimizado
+                    height: 680, // Alto incrementado para que quepa todo el texto
                     size: "stretch", 
                     minWidth: 315,
                     maxWidth: 1000,
                     minHeight: 420,
-                    maxHeight: 700,
-                    maxShadowOpacity: 0.2, // Reducir opacidad mejora FPS
+                    maxHeight: 750,
+                    maxShadowOpacity: 0.2, 
                     showCover: true,
-                    mobileScrollSupport: false // Mejora la velocidad en táctil
+                    mobileScrollSupport: false 
                 });
 
                 pageFlip.loadFromHTML(document.querySelectorAll('.page'));
